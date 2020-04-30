@@ -16,26 +16,41 @@ var app = new Vue ({
       {code: 'A01', name: 'product A'},
       {code: 'B01', name: 'product B'},
       {code: 'C01', name: 'product C'},
-    ]
+    ],
+    point: {
+      x: 0, y: 0
+    },
   },
   created: function() {
-    addEventListener('resize', this.resizeHandler)
+    addEventListener('mousemove', this.mousemoveHandler);
   },
   beforeDestroy: function() {
-    removeEventListener('resize', this.resizeHandler)
+    removeEventListener('mousemove', this.mousemoveHandler);
   },
+
+  // created: function() {
+  //   addEventListener('resize', this.resizeHandler)
+  // },
+  // beforeDestroy: function() {
+  //   removeEventListener('resize', this.resizeHandler)
+  // },
   methods: {
-    now1: function(){
-      return (new Date()).toLocaleString();
+    mousemoveHandler: function($event) {
+      this.point.x = $event.clientX;
+      this.point.y = $event.clientY;
     },
-    // 削除ボタンのクリックイベントハンドラ
-    onDeleteItem: function () {
-      this.stock--;
-    },
-    resizeHandler: function($event) {
-      this.width = $event.target.innerWidth;
-      this.height = $event.target.innerHeight;
-    }
+
+    // now1: function(){
+    //   return (new Date()).toLocaleString();
+    // },
+    // // 削除ボタンのクリックイベントハンドラ
+    // onDeleteItem: function () {
+    //   this.stock--;
+    // },
+    // resizeHandler: function($event) {
+    //   this.width = $event.target.innerWidth;
+    //   this.height = $event.target.innerHeight;
+    // }
   },
   computed: {
     isUrudoshi: function() {
