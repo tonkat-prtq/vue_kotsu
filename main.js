@@ -1,40 +1,202 @@
+// 数値を通過書式「#,###,###」に変換するフィルター
+Vue.filter('number_format', function(val) {
+  // toLocaleStringで通過書式に変換してくれるx
+  return val.toLocaleString();
+})
+
+var app = new Vue ({
+  el: '#app',
+  data: {
+    // 表示中の商品数
+    count: 0,
+    // 「セール対象」のチェック状態
+    showSaleItem: false,
+    // 「送料無料」のチェック状態
+    showDelvFree: false,
+    // 「並び替え」の選択肢(1: 標準, 2: 価格が安い順)
+    sortOrder: 1,
+    // 商品リスト
+    products: [
+      {name: 'Michael<br>スマホケース', price: 1580, image: 'images/01.jpg', delv: 0, isSale: true},
+      {name: 'Raphael<br>スマホケース', price: 1580, image: 'images/02.jpg', delv: 0, isSale: true},
+      {name: 'Gabriel<br>スマホケース', price: 1580, image: 'images/03.jpg', delv: 240, isSale: true},
+      {name: 'Uriel<br>スマホケース', price: 980, image: 'images/04.jpg', delv: 0, isSale: true},
+      {name: 'Ariel<br>スマホケース', price: 980, image: 'images/05.jpg', delv: 0, isSale: false},
+      {name: 'Azrael<br>スマホケース', price: 1580, image: 'images/06.jpg', delv: 0, isSale: false},
+    ]
+  },
+
+  watch: {
+    // 「セール対象」チェックボックスの状態を監視するウォッチャ
+    showSaleItem: function(newVal, oldVal) {
+      // ここでproductsの配列を書き換える
+      console.log('showSaleItemウォッチャが呼び出されました');
+    },
+
+    showDelvFree: function(newVal, oldVal) {
+      // ここでproductsの配列を書き換える
+      console.log('showDelvFreeウォッチャが呼び出されました')
+    },
+  }
+});
+
+// // コンポーネントのルートノード
+// var nodeApp = document.querySelector('#app');
+
+// // チェックボックスのイベントハンドラを登録
+// var nodeCheckbox = nodeApp.querySelectorAll('input[type="checkbox"]');
+// nodeCheckbox[0].addEventListener('change', onCheckChanged, false);
+// nodeCheckbox[1].addEventListener('change', onCheckChanged, false);
+
+// // セレクトボックスのイベントハンドラを登録
+// var nodeSelect = nodeApp.querySelector('.sorting');
+// nodeSelect.addEventListener('change', onOrderChanged, false);
+
+// // 初期表示時の商品ノードリスト（保存用）
+// var nodeItemsOrg = nodeApp.querySelectorAll('.item');
+
+// // チェック状態変更イベントハンドラ
+// function onCheckChanged(event) {
+
+//   var nodeItems = nodeApp.querySelectorAll('.item');  // 商品ノードのリスト
+//   var nodeCount = nodeApp.querySelector('.count');    // 表示件数のノード
+//   var count     = nodeItems.length;                   // 表示件数
+
+//   // 全ての商品ノードをいったん表示する
+//   for (var i=0; i<nodeItems.length; i++) {
+//     showNode(nodeItems[i]);
+//   }
+
+//   // セール対象のチェックがついている場合
+//   if (nodeCheckbox[0].checked) {
+//     // 全ての商品ノードを捜査
+//     for (var i=0; i<nodeItems.length; i++) {
+//       // セール対象の商品ではない場合
+//       if (!isSaleItem(nodeItems[i])) {
+//         // この商品を非表示にする
+//         hideNode(nodeItems[i]);
+//         // 件数のカウントを減らす
+//         count--;
+//       }
+//     }
+//   }
+//   // 送料無料のチェックがついている場合
+//   if (nodeCheckbox[1].checked) {
+//     // 全ての商品ノードを捜査
+//     for (var i=0; i<nodeItems.length; i++) {
+//       // 送料無料の商品ではない場合
+//       if (!isDelvFreeItem(nodeItems[i])) {
+//         // この商品を非表示にする
+//         hideNode(nodeItems[i]);
+//         // 件数のカウントを減らす
+//         count--;
+//       }
+//     }
+//   }
+//   // 件数を更新
+//   nodeCount.textContent = count + '件';
+// }
+
+// // 並び順の変更イベントハンドラ
+// function onOrderChanged(event) {
+
+//   var nodeList  = nodeApp.querySelector('.list');     // 商品一覧ノード
+//   var nodeItems = nodeApp.querySelectorAll('.item');  // 商品ノードのリスト
+
+//   // 商品ノードのリストを新しい配列に詰め替える（退避しておく）
+//   var products = [];
+//   for (var i=0; i<nodeItems.length; i++) {
+//     products.push(nodeItems[i]);
+//   }
+
+//   // DOMから全ての商品ノードを削除する
+//   while (nodeList.firstChild) {
+//     nodeList.removeChild(nodeList.firstChild);
+//   }
+
+//   //「標準」が選択されている場合
+//   if (event.target.value == '1') {
+//     // 初期表示時の商品ノードを復元する
+//     for (var i=0; i<products.length; i++) {
+//       nodeList.appendChild(nodeItemsOrg[i]);
+//     }
+//   }
+//   //「価格が安い順」が選択されている場合
+//   else if (event.target.value == '2') {
+//     // 配列を並び替え
+//     products.sort(function(a,b) {
+//       // 商品価格のノードからカンマを除去した数値を読み取る
+//       var prevPrice    = parseInt(a.querySelector('.price span').textContent.replace(',',''));
+//       var currentPrice = parseInt(b.querySelector('.price span').textContent.replace(',',''));
+//       return prevPrice - currentPrice;
+//     });
+//     // 並び替え後の商品ノードをDOMに追加する
+//     for (var i=0; i<products.length; i++) {
+//       nodeList.appendChild(products[i]);
+//     }
+//   }
+// }
+
+// // セール商品かどうかを判定する関数
+// function isSaleItem(nodeItem) {
+//   var node = nodeItem.querySelector('.status');
+//   return (node && node.textContent == 'SALE');
+// }
+
+// // 送料無料かどうかを判定する関数
+// function isDelvFreeItem(nodeItem) {
+//   var node = nodeItem.querySelector('.shipping-fee');
+//   return (node && node.textContent == '送料無料');
+// }
+
+// // ノードを非表示にする関数
+// function hideNode(node) {
+//   node.setAttribute('style','display:none;');
+// }
+
+// // ノードを表示する関数
+// function showNode(node) {
+//   node.removeAttribute('style');
+// }
+
+
 // Vue.filter('number_format', function(val) {
 //   return val.toLocaleString();
 // });
 
-var app = new Vue ({
+// var app = new Vue ({
 
-  el: "#app",
-  data: {
-    color: '#000000',
-    red: 0,
-    blue: 0,
-    green: 0,
-    arrival_date: null,
-    min_date: null,
-    answer: "",
-    category: [],
-    options: [
-      {code: 'ans1', label: 'はじめて'},
-      {code: 'ans2', label: '週1'},
-      {code: 'ans3', label: '月2'},
-      {code: 'ans4', label: '半年に1回'},
-    ],
-    show: true,
-    year: (new Date()).getFullYear(),
-    price: 1280,
-    stock: 10,
-    width: window.innerWidth,
-    height: window.innerHeight,
-    products: [
-      {code: 'A01', name: 'product A'},
-      {code: 'B01', name: 'product B'},
-      {code: 'C01', name: 'product C'},
-    ],
-    point: {
-      x: 0, y: 0
-    },
-  },
+//   el: "#app",
+//   data: {
+//     color: '#000000',
+//     red: 0,
+//     blue: 0,
+//     green: 0,
+//     arrival_date: null,
+//     min_date: null,
+//     answer: "",
+//     category: [],
+//     options: [
+//       {code: 'ans1', label: 'はじめて'},
+//       {code: 'ans2', label: '週1'},
+//       {code: 'ans3', label: '月2'},
+//       {code: 'ans4', label: '半年に1回'},
+//     ],
+//     show: true,
+//     year: (new Date()).getFullYear(),
+//     price: 1280,
+//     stock: 10,
+//     width: window.innerWidth,
+//     height: window.innerHeight,
+//     products: [
+//       {code: 'A01', name: 'product A'},
+//       {code: 'B01', name: 'product B'},
+//       {code: 'C01', name: 'product C'},
+//     ],
+//     point: {
+//       x: 0, y: 0
+//     },
+//   },
 
   // created: function(){
   //   var dt = new Date();
@@ -55,7 +217,7 @@ var app = new Vue ({
   // beforeDestroy: function() {
   //   removeEventListener('resize', this.resizeHandler)
   // },
-  methods: {
+  // methods: {
     //日付をYYYY-MM-DDに整形するメソッド
     // formatDate: function(dt) {
     //   var y = dt.getFullYear();
@@ -84,7 +246,7 @@ var app = new Vue ({
     //   this.width = $event.target.innerWidth;
     //   this.height = $event.target.innerHeight;
     // }
-  },
+  // },
 
   // watch: {
   //   stock: function(newStock, oldStock) {
@@ -94,7 +256,7 @@ var app = new Vue ({
   //   }
   // },
 
-  computed: {
+  // computed: {
     // 赤、緑、青を配列で返す算出プロパティ
     // colorElement: function() {
     //   return [this.red, this.green, this.blue];
@@ -123,9 +285,9 @@ var app = new Vue ({
     //   }
     //   return '';
     // },
-  },
+  // },
 
-  watch: {
+  // watch: {
     // // 赤・緑・青のいずれかの変更を監視する
     // colorElement: function(newRGB, oldRGB) {
     //   // 赤・緑・青を2桁の16進数表記に変換する
@@ -145,7 +307,7 @@ var app = new Vue ({
     // statusMessage: function() {
     //   console.log('商品のステータスが変化しました');
     // }
-  },
+  // },
 
   // filters: {
   //   number_format: function(val) {
@@ -155,4 +317,4 @@ var app = new Vue ({
   //     return val + '円';
   //   }
   // }
-});
+// });
