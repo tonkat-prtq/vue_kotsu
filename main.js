@@ -8,6 +8,23 @@ btnLoad.addEventListener('click', function(event) {
   xmlHttpRequest.onreadystatechange = function() {
     // レスポンスの受信が正常に完了したとき
     if (this.readyState == 4 /*&& this.status == 200*/) {
+      // 受診したJSONを変数に格納する
+      var products = this.response;
+      // 商品リストの子ノードを全て削除する
+      var result = document.querySelector('#result');
+      result.textContent = '';
+      // 商品の子ノードをDOMに挿入する
+      for (var i=0; i < products.length; i++) {
+        var text = '商品ID:' + products[i].id;
+        text += '商品名:' + products[i].name;
+        text += '料金:' + products[i].price;
+        text += '画像パス:' + products[i].image;
+        text += '送料:' + products[i].delv;
+        text += 'セール対象:' + products[i].isSale;
+        var div = document.createElement('div');
+        div.textContent = text;
+        result.appendChild(div);
+      }
       // 受信したデータをコンソールに出力する
       console.log(this.readyState, this.response);
     }
