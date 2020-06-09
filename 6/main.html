@@ -1,7 +1,6 @@
 <div id="app">
-  <p>ここにコンポーネントが入ります</p>
-  <show-hello></show-hello>
-  <my-product></my-product>
+  <!-- (4)子に「child-click」イベントが発生したら親の「PriceDown」を呼び出す -->
+  <my-product v-on:child-click="priceDown" v-bind:price="price"></my-product>
 </div>
 <script src="https://jp.vuejs.org/js/vue.js"></script>
 <script src="show-hello.js"></script>
