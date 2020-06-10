@@ -1,9 +1,6 @@
 Vue.component('my-product', {
   //(1)ボタンがクリックされたら子コンポーネントの「ClickHandler」を呼び出す
-  template:`
-    '<div>
-      <button v-on:click="clickHandler">値下げする</button> {{ price }}(円)
-    </div>'`,
+  template:'<button>現在の価格{{price}}円</button>',
   props: ['price'],
   methods: {
     //(2)ボタンのクリックイベントハンドラ
